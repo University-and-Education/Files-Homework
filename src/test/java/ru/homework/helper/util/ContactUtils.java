@@ -1,4 +1,4 @@
-package ru.homework.util;
+package ru.homework.helper.util;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -8,13 +8,6 @@ public class ContactUtils {
 
     private final static Pattern PATTERN = Pattern.compile("[^\\d]");
 
-
-    /**
-     * The method formats numbers from a "dirty" format into an actual form like "+7 (***) *** - ****".
-     *
-     * @param dirtyPhoneNumbers - list of numbers where formatting was not performed
-     * @return - formatted numbers("+7 (***) *** - ****").
-     */
     public static List<String> getCorrectPhoneNumber(List<String> dirtyPhoneNumbers) {
 
         return dirtyPhoneNumbers.stream().map(dirtyNumber -> {

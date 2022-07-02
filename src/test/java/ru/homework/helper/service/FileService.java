@@ -1,6 +1,6 @@
-package ru.homework.service;
+package ru.homework.helper.service;
 
-import ru.homework.util.FileUtils;
+import ru.homework.helper.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;

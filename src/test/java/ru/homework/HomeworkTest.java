@@ -1,17 +1,14 @@
 package ru.homework;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.homework.service.FileService;
-import ru.homework.service.NumberService;
-import ru.homework.util.FileUtils;
+import ru.homework.service.PhoneNumberService;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -20,13 +17,31 @@ import java.util.List;
 public class HomeworkTest {
 
     @Test
-    public void testHomeworkRealisation() throws IOException {
-        Path path = FileUtils.findFolderWithFiles();
+    public void testHomeworkRealisation() throws IOException, Exception {
 
-        FileService fileService = new FileService();
-        List<File> fileList = fileService.findAllCorrectFilesInFolder(path.toString());
+        List<String> actualPhoneNumbers = PhoneNumberService.findAllActualPhoneNumbers();
+        Assert.assertNotNull(actualPhoneNumbers);
+        Assert.assertFalse(actualPhoneNumbers.contains("Маша Иванова"));
+        Assert.assertFalse(actualPhoneNumbers.contains("Телефон номер7-812-1234562"));
+        Assert.assertFalse(actualPhoneNumbers.contains("(812) 1234563"));
+        Assert.assertFalse(actualPhoneNumbers.contains("8234512164"));
+        Assert.assertFalse(actualPhoneNumbers.contains("Номер 123 неверный"));
+        Assert.assertFalse(actualPhoneNumbers.contains("+7 812 1234500"));
+        Assert.assertFalse(actualPhoneNumbers.contains("8345556"));
+        Assert.assertFalse(actualPhoneNumbers.contains("123-45-60"));
+        Assert.assertFalse(actualPhoneNumbers.contains("+7 (495) 1234544"));
+        Assert.assertFalse(actualPhoneNumbers.contains("1234555"));
 
-        NumberService findNumbers = new NumberService();
-        System.out.println(findNumbers.getAllActualPhoneNumbers(fileList));
+        Assert.assertTrue(actualPhoneNumbers.contains("+7 (812) 123-4500"));
+        Assert.assertTrue(actualPhoneNumbers.contains("+7 (495) 123-4567"));
+        Assert.assertTrue(actualPhoneNumbers.contains("+7 (812) 123-4556"));
+        Assert.assertTrue(actualPhoneNumbers.contains("+7 (812) 123-4563"));
+        Assert.assertTrue(actualPhoneNumbers.contains("+7 (812) 123-4561"));
+        Assert.assertTrue(actualPhoneNumbers.contains("+7 (812) 123-4567"));
+        Assert.assertTrue(actualPhoneNumbers.contains("+7 (812) 834-5556"));
+
+        Assert.assertEquals(actualPhoneNumbers.size(), 24);
+        Assert.assertEquals(actualPhoneNumbers.get(0), "+7 (095) 123-4569");
+        Assert.assertEquals(actualPhoneNumbers.get(23), "+7 (821) 123-4500");
     }
 }

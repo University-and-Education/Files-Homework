@@ -1,15 +1,30 @@
-package ru.homework.service;
+package ru.homework.helper.service;
 
-import ru.homework.util.ContactUtils;
+import ru.homework.helper.util.ContactUtils;
+import ru.homework.helper.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class NumberService {
+
+    public static List<String> findAllActualPhoneNumbers() throws IOException {
+        Path path = FileUtils.findFolderWithFiles();
+
+        FileService fileService = new FileService();
+        List<File> fileList = fileService.findAllCorrectFilesInFolder(path.toString());
+
+        getAllActualPhoneNumbers(fileList);
+        List<String> actualPhoneNumbersList = getAllActualPhoneNumbers(fileList);
+        Collections.sort(actualPhoneNumbersList);
+        return actualPhoneNumbersList;
+    }
 
     /**
      * The method reads all phone numbers from the file list.
@@ -18,7 +33,7 @@ public class NumberService {
      * @param fileList - list of files where numbers are stored.
      * @return - phone numbers from files in "dirty" form.
      */
-    private List<String> getAllNumbersFromFileList(List<File> fileList) {
+    private static List<String> getAllNumbersFromFileList(List<File> fileList) {
         List<String> actualPhoneNumbers = new ArrayList<>();
         fileList.forEach(x -> {
             List<String> line = null;
@@ -42,7 +57,7 @@ public class NumberService {
      * @param fileList - list of files where numbers are stored.
      * @return - formatted phone numbers from files.
      */
-    public List<String> getAllActualPhoneNumbers(List<File> fileList) {
+    public static List<String> getAllActualPhoneNumbers(List<File> fileList) {
         List<String> dirtyPhoneNumbers = getAllNumbersFromFileList(fileList);
         return new ArrayList<>(ContactUtils.getCorrectPhoneNumber(dirtyPhoneNumbers));
     }
